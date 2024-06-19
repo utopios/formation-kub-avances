@@ -1,0 +1,65 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: appconfigs.myorg.com
+spec:
+  group: myorg.com
+  names:
+    kind: AppConfig
+    plural: appconfigs
+    singular: appconfig
+    shortNames:
+      - acfg
+  scope: Namespaced
+  versions:
+    - name: v1
+      served: true
+      storage: false
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                appName:
+                  type: string
+                config:
+                  type: object
+                  additionalProperties:
+                    type: string
+      subresources:
+        status: {}
+    - name: v2
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                appName:
+                  type: string
+                configuration:
+                  type: object
+                  properties:
+                    settings:
+                      type: object
+                      additionalProperties:
+                        type: string
+                    version:
+                      type: string
+      subresources:
+        status: {}
+  conversion:
+    strategy: Webhook
+    webhook:
+      clientConfig:
+        service:
+          namespace: default
+          name: conversion-webhook-service
+          path: /convert
+        caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUVlakNDQTJLZ0F3SUJBZ0lVTVhLbDJaa1pteU0wZGpSTXVWOEtzeEl2U05Bd0RRWUpLb1pJaHZjTkFRRUwKQlFBd2djc3hDekFKQmdOVkJBWVRBbFZUTVJRd0VnWURWUVFJREF0U1lXNWtiMjFUZEdGMFpURVRNQkVHQTFVRQpCd3dLVW1GdVpHOXRRMmwwZVRFYk1Ca0dBMVVFQ2d3U1VtRnVaRzl0VDNKbllXNXBlbUYwYVc5dU1SOHdIUVlEClZRUUxEQlpTWVc1a2IyMVBjbWRoYm1sNllYUnBiMjVWYm1sME1TSXdJQVlKS29aSWh2Y05BUWtCRmhObGVHRnQKY0d4bFFHVjRZVzF3YkdVdVkyOXRNUzh3TFFZRFZRUUREQ1pqYjI1MlpYSnphVzl1TFhkbFltaHZiMnN0YzJWeQpkbWxqWlM1a1pXWmhkV3gwTG5OMll6QWVGdzB5TkRBMk1UZ3hPVFEzTURWYUZ3MHlOVEEyTVRneE9UUTNNRFZhCk1JSExNUXN3Q1FZRFZRUUdFd0pWVXpFVU1CSUdBMVVFQ0F3TFVtRnVaRzl0VTNSaGRHVXhFekFSQmdOVkJBY00KQ2xKaGJtUnZiVU5wZEhreEd6QVpCZ05WQkFvTUVsSmhibVJ2YlU5eVoyRnVhWHBoZEdsdmJqRWZNQjBHQTFVRQpDd3dXVW1GdVpHOXRUM0puWVc1cGVtRjBhVzl1Vlc1cGRERWlNQ0FHQ1NxR1NJYjNEUUVKQVJZVFpYaGhiWEJzClpVQmxlR0Z0Y0d4bExtTnZiVEV2TUMwR0ExVUVBd3dtWTI5dWRtVnljMmx2YmkxM1pXSm9iMjlyTFhObGNuWnAKWTJVdVpHVm1ZWFZzZEM1emRtTXdnZ0VpTUEwR0NTcUdTSWIzRFFFQkFRVUFBNElCRHdBd2dnRUtBb0lCQVFEVAo3K1p1TCszU2hFZ0pRM0ljakFDNUpHblRVeFYvL2kzbWpMdnZpNld2SVBORDVhMC9KNzBONGxldDBMZm9BK3JZClUzWlhEeDNEUzRRc25ocWN1RStkdWFnRjBLRHVzNjB1S2wwaGR4MDF4bDk2N2t0WFViUG5GMENxdncvYjlpV2kKbGRMVmI4czRKMnBTV2QzUitBb096V2F4SUVacmRsNm1pU0hqYUtNelB5TFBscmtzcnZNdGxtSjFnaURZcU9QVApaNXE3aGNSVFNWWkJZU3dHa2txS3NCU1JKb1lTRUloZ2tDNmh1dTFPTXlkSXVianZ0YUZlV2swVmlaWnEvczZ6Ck1hL1dPVEE2NnZpdExVQklWcEUvbG1QTFJlVjV6emtHbVJGSXVvWklrSFlXc2N2bk9KRXVXM0VRS0tpU3UwSWMKQzJ4aWtSeCtqYUprM2hTWVpITWRBZ01CQUFHalZEQlNNREVHQTFVZEVRUXFNQ2lDSm1OdmJuWmxjbk5wYjI0dApkMlZpYUc5dmF5MXpaWEoyYVdObExtUmxabUYxYkhRdWMzWmpNQjBHQTFVZERnUVdCQlJpdjRGZEJGZGlJb1NxClA3Uk43ZFVtbzIxai9EQU5CZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFScnVIekNFdWw4YVpvNTFheVQxVUwxN1gKemxlYkpncVhUZG95Mlg4cmdkTHhVR0g2cnczTnNFU2NuY2owaFoxb0lxaVhOb29XTVAwZ0NsdnY5S1F1STcxagovQ0duVlZaZEVMdTRjRDNFMDliWVl0dFVHUlFXM0Rab1lDdzBxMFdiWTJES0NZcWFYeURNZ0hEMGVVOHUwaCtNCkNQKzFqNFhhSG1iNGRRT2lwWWVYUjVRTk5DWkNkeDZ5cWppTVJENm02OUVZbTFXdlRXYkJxNUtzNkJmeXF3eUQKSGZBMHJVQTIzNjVLaHNCRlo3NVlDcjNwc0s2ckxJY1EyZXJDYlFjMU9kbkc0azNzMUZoQ3VLM25oL0ZLdDFxZgpvRVIxcFpVVGZPMUhVWG9jK2tLQTF3eXNPTFUvQWNEL0RBaWRUdmhXL3IyWnNjUXFkVDNRVDJBRW1xMHVKQT09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+      conversionReviewVersions: ["v1", "v2"]

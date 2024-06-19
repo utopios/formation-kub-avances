@@ -55,12 +55,16 @@ spec:
                 field1:
                   type: string
                 field2:
-                  type: intege
+                  type: integer
                 field3:
-                  type: intege
+                  type: integer
+                config:
+                  type: object
+                  additionalProperties:
+                    type: string
   conversion:
     strategy: Webhook
-    Webhook:
+    webhook:
       clientConfig:
         service: 
           namespace: default
