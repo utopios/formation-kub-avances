@@ -11,6 +11,9 @@ kubectl apply -f k8s.yaml
 kubectl apply -f bases-crd.yaml
 
 # Déploiement des ressources
-kbuectl apply -f v1.yaml
-kbuectl apply -f v2.yaml
+kubectl apply -f v1.yaml
+kubectl apply -f v2.yaml
+
+kubectl get acfg.v1.myorg.com -o yaml 
+
 ```
