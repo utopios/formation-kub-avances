@@ -1,0 +1,10 @@
+apiVersion: myorg.com/v1
+kind: AppConfig
+metadata:
+  name: appconfig-v1
+  namespace: default
+spec:
+  appName: "My Application"
+  config:
+    database: "mysql"
+    featureX: "enabled"

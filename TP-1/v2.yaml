@@ -1,0 +1,12 @@
+apiVersion: myorg.com/v2
+kind: AppConfig
+metadata:
+  name: appconfig-v2
+  namespace: default
+spec:
+  appName: "My Application"
+  configuration:
+    settings:
+      database: "mysql"
+      featureX: "enabled"
+    version: "2.0"
