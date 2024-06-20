@@ -1,0 +1,32 @@
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: vote-pod-security-policy
+spec:
+  privileged: false  
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  volumes:
+    - emptyDir
+  seLinux:
+    rule: MustRunAs
+    seLinuxOptions:
+      level: "s0:c123,c456"
+  runAsUser:
+    rule: MustRunAsNonRoot
+  runAsGroup:
+    rule: MustRunAs
+    ranges:
+      - min: 1000
+        max: 1000
+  fsGroup:
+    rule: MustRunAs
+    ranges:
+      - min: 2000
+        max: 2000
+  supplementalGroups:
+    rule: MustRunAs
+    ranges:
+      - min: 2000
+        max: 2000
+  allowedCapabilities: [] 
