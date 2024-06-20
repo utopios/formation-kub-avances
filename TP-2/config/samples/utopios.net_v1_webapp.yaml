@@ -2,8 +2,14 @@ apiVersion: utopios.net.utopios.net/v1
 kind: WebApp
 metadata:
   labels:
-    app.kubernetes.io/name: tp-2
+    app.kubernetes.io/name: tp2
     app.kubernetes.io/managed-by: kustomize
   name: webapp-sample
 spec:
-  # TODO(user): Add fields here
+  appName: "nginx-app"
+  image: "nginx"
+  dbImage: "mysql:5.7"
+  replicas: 3
+  dbSize: "10Gi"
+  autoScaleEnabled: true
+  trafficThreshold: 10

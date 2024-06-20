@@ -62,7 +62,7 @@ func (r *WebAppReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 	if err := r.Get(ctx, req.NamespacedName, &webApp); err != nil {
 		log.Error(err, "unable to fetch WebApp")
 		//A corriger
-		return ctrl.Result{RequeueAfter: time.Minute}, client.IgnoreNotFound(err)
+		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
 
 	deployment := &appsv1.Deployment{}
