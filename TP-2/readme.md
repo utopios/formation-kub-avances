@@ -190,3 +190,15 @@ func (r *WebAppReconciler) ensureHPA(webApp webv1.WebApp, deployment appsv1.Depl
     return nil
 }
 ```
+
+## Etapes correction TP
+
+1. Initialisation de l'operateur
+```bash
+kubebuilder init --domain utopios.net --repo github.com/utopios/webapp
+```
+2. Création de l'api pour la gestion de ressources
+
+```bash
+kubebuilder create api --group utopios.net --version v1 --kind WebApp
+```
