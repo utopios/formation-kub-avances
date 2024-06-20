@@ -1,0 +1,14 @@
+apiVersion: kubescheduler.config.k8s.io/v1
+kind: KubeSchedulerConfiguration
+clientConnection:
+  kubeconfig: "/etc/kubernetes/scheduler.conf"
+profiles:
+  - schedulerName: default-scheduler
+    extenders:
+      - urlPrefix: "http://scheduler-extender.kube-system.svc.cluster.local:12345"
+        filterVerb: "filter"
+        prioritizeVerb: "prioritize"
+        weight: 1
+        enableHttps: false
+        nodeCacheCapable: false
+        ignorable: false
