@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: vote-ui
+  name: vote-ui
+  namespace: vote
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vote-ui
+  template:
+    metadata:
+      labels:
+        app: vote-ui
+    spec:
+      containers:
+        - image: voting/vote-ui:v1.0.19
+          name: vote-ui
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          volumeMounts:
+          - name: run
+            mountPath: /var/run
+          - name: cache
+            mountPath: /var/cache/nginx
+      volumes:
+      - name: run
+        emptyDir: {}
+      - name: cache
+        emptyDir: {}

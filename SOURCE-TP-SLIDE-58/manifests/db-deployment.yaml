@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: db
+  name: db
+  namespace: vote
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db
+  template:
+    metadata:
+      labels:
+        app: db
+    spec:
+      serviceAccountName: vote-sa # Utilisation du ServiceAccount
+      containers:
+        - image: postgres:15.3-alpine3.18
+          name: postgres
+          securityContext:
+            runAsUser: 0                  # Violation: Running as root user
+            fsGroup: 1001                 # Violation: Incorrect fsGroup
+            capabilities:
+              add: ["SYS_ADMIN"]          # Violation: Adding capabilities
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: db
+                  key: username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db
+                  key: password
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - mountPath: /var/run/postgresql
+              name: run
+              readOnly: false             # Violation: Writable root filesystem
+      volumes:
+        - name: run
+          emptyDir: {}
+      hostNetwork: true                    # Violation: Host network enabled

@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: redis
+  name: redis
+  namespace: vote
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      serviceAccountName: vote-sa # Utilisation du ServiceAccount
+      containers:
+        - image: redis:7.0.7-alpine3.17
+          name: redis
+          securityContext:
+            runAsUser: 500              # Violation: Incorrect runAsUser
+            runAsGroup: 3000            # Violation: Incorrect runAsGroup
+            allowPrivilegeEscalation: true # Violation: Allowing privilege escalation
+          ports:
+            - containerPort: 6379
+          volumeMounts:
+            - mountPath: /data
+              name: redis-data
+      volumes:
+        - name: redis-data
+          hostPath:                      # Violation: Using hostPath volume
+            path: /data/redis
+            type: Directory
